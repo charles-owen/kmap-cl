@@ -1,4 +1,4 @@
-import './kmap.scss';
+import './_kmap.scss';
 import Kmap from 'kmap';
 
 export {Kmap};

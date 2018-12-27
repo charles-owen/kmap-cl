@@ -9,7 +9,7 @@ KmapFactory.create = function(site) {
 		const elements = document.querySelectorAll('div.cl-kmap');
 		for(let i=0; i<elements.length; i++) {
 			let element = elements[i];
-			const json = JSON.parse(element.textContent);
+			const json = element.textContent;
 			element.innerHTML = '';
 			const kmap = new Kmap(element, json);
 			kmap.startNow();
