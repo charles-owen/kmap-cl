@@ -20,6 +20,7 @@ use CL\Course\Member;
  * @property boolean fixed
  * @property int size
  * @property boolean manual
+ * @property array minterms
  * @property boolean solve
  * @property boolean verbose
  * @endcond
@@ -86,7 +87,6 @@ class KmapViewAux extends ViewAux {
 				$this->generator = $value;
 				break;
 
-
 			case "minterms":
 				$this->minterms = $value;
 				break;
@@ -145,11 +145,10 @@ class KmapViewAux extends ViewAux {
 	 * @return string HTML
 	 */
 	public function present($class=null) {
-		$user =$this->view->get_user();
-		$course = $this->view->get_course();
+		$user =$this->view->user;
+		$site = $this->view->site;
 
-		return $this->present_div($class) .
-			$this->present_script($course, $user);
+		return $this->present_div($site, $user, $class);
 	}
 
 	/**
@@ -254,10 +253,22 @@ class KmapViewAux extends ViewAux {
 			$data['genDontCareOption'] = false;
 		}
 
+		if($this->genDontCare) {
+			$data['genDontCare'] = true;
+		}
+
 		if($this->resultSel !== null) {
 			$data['resultSel'] = $this->resultSel;
 			$data['expressionSel'] = $this->expressionSel;
 			$data['success'] = $this->success;
+		}
+
+		if(count($this->minterms) > 0) {
+			$data['minterms'] = $this->minterms;
+		}
+
+		if(count($this->dontcare) > 0) {
+			$data['dontcare'] = $this->dontcare;
 		}
 
 		if(strlen($class) > 0) {
@@ -334,6 +345,7 @@ JS;
 	private $genDontCareOption;     // Generator has don't cares as an option?
 	private $generator;             // Display the generator
 	private $fixed;                 // Fixed minterm choice, no generator
+	private $genDontCare = false;	// Generate don't cares in problems
 
 	// A results selector. Selector that will be set to the success value
 	// if the expression successfully checks
@@ -345,7 +357,6 @@ JS;
 	private $verbose = true;		///< Verbose response on mistakes
 	private $minterms = array();	///< The minterms for the problem
 	private $dontcare = array(); 	///< Minterms we don't care about
-	private $genDontCare = false;	///< Generate don't cares in problems
 	private $labels = null;			///< Optional array of labels to use
 
 }
