@@ -9,6 +9,9 @@
       "email": "cbowen@msu.edu"
     }
   ],
+  "require" : {
+    "cl/course": "^2.1"
+  },
   "autoload":{
     "psr-4": {
       "CL\\Kmap\\": "src/Kmap"
@@ -19,5 +22,10 @@
       "type": "vcs",
       "url": "https://github.com/charles-owen/kmap-cl.git"
     }
-  ]
+  ],
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.1.x-dev"
+    }
+  }
 }
