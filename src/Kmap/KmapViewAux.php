@@ -26,7 +26,9 @@ use CL\Course\Member;
  * @endcond
  */
 class KmapViewAux extends ViewAux {
-
+	/**
+	 * KmapViewAux constructor.
+	 */
 	public function __construct() {
 		$this->reset();
 	}
@@ -281,46 +283,46 @@ class KmapViewAux extends ViewAux {
 		return $html;
 	}
 
-	public function present_script(\Course $course, \User $user, $demo=false, $json=null) {
-		$html = '<script>$(document).ready(function()' . '{';
-
-		$root = $course->get_root() . '/cirsim';
-
-		$id = $user->get_id();
-		$staff = $user->at_least(\User::GRADER) ? "1" : "0";
-
-		$minterms = implode(",", $this->minterms);
-
-		$html .= <<<JS
-var kmap = new Kmap.Main("$root", "#$this->id"); kmap.config.size=$this->size;
-kmap.config.minterms=[$minterms];
-JS;
-
-		if(count($this->dontcare) > 0) {
-			$dontcare = implode(",", $this->dontcare);
-			$html .= "kmap.config.dontcare=[$dontcare];";
-		}
-
-		if($this->genDontCare) {
-			$html .= "kmap.config.gendontcare=true";
-		}
-
-		if($this->labels !== null) {
-			$labels = '';
-			foreach($this->labels as $label) {
-				if(strlen($labels) > 0) {
-					$labels .= ",";
-				}
-				$labels .= '"' . $label . '"';
-			}
-			$html .= "kmap.config.labels=[$labels];";
-		}
-
-		$html .= $this->js;
-
-		$html .= 'kmap.run();});</script>';
-		return $html;
-	}
+//	public function present_script(\Course $course, \User $user, $demo=false, $json=null) {
+//		$html = '<script>$(document).ready(function()' . '{';
+//
+//		$root = $course->get_root() . '/cirsim';
+//
+//		$id = $user->get_id();
+//		$staff = $user->at_least(\User::GRADER) ? "1" : "0";
+//
+//		$minterms = implode(",", $this->minterms);
+//
+//		$html .= <<<JS
+//var kmap = new Kmap.Main("$root", "#$this->id"); kmap.config.size=$this->size;
+//kmap.config.minterms=[$minterms];
+//JS;
+//
+//		if(count($this->dontcare) > 0) {
+//			$dontcare = implode(",", $this->dontcare);
+//			$html .= "kmap.config.dontcare=[$dontcare];";
+//		}
+//
+//		if($this->genDontCare) {
+//			$html .= "kmap.config.gendontcare=true";
+//		}
+//
+//		if($this->labels !== null) {
+//			$labels = '';
+//			foreach($this->labels as $label) {
+//				if(strlen($labels) > 0) {
+//					$labels .= ",";
+//				}
+//				$labels .= '"' . $label . '"';
+//			}
+//			$html .= "kmap.config.labels=[$labels];";
+//		}
+//
+//		$html .= $this->js;
+//
+//		$html .= 'kmap.run();});</script>';
+//		return $html;
+//	}
 
 	/**
 	 * Set selectors that will be set when Check is pressed.
@@ -358,5 +360,4 @@ JS;
 	private $minterms = array();	///< The minterms for the problem
 	private $dontcare = array(); 	///< Minterms we don't care about
 	private $labels = null;			///< Optional array of labels to use
-
 }

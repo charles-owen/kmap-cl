@@ -84,7 +84,7 @@ HTML;
 	}
 
 
-//    /**
+//    /*
 //	 * Present the question to the user
 //     * @param string $sessionName The name of the session variable for the QuizSession object
 //     * @param $preview TRUE if staff preview mode
@@ -157,10 +157,12 @@ HTML;
 //		return $html;
 //	}
 
-
 	/**
-	 * Handle a submit of the question answer from the POST page
-	 * @return string HTML for the question
+	 * Handle quiz submission of a Kmap quiz
+	 * @param Site $site The site object
+	 * @param User $user The current user
+	 * @param $post $_POST as sent to the API
+	 * @return string HTML for the response to the user
 	 */
 	public function submit(Site $site, User $user, $post) {
 
