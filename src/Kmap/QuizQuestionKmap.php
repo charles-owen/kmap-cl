@@ -170,7 +170,7 @@ HTML;
 		$expression = $post['cl-kmap-expression'];
 
 		$html = $this->text;
-		$good = +$answer === $this->success;
+		$good = is_numeric($answer) && +$answer === $this->success;
 
 		$this->correct = $good ? $this->points : 0;
 		$this->studentanswer = $expression;

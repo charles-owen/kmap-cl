@@ -93,6 +93,10 @@ class KmapViewAux extends ViewAux {
 				$this->minterms = $value;
 				break;
 
+			case 'map':
+				$this->map = $value;
+				break;
+
 			case "fixed":
 				$this->fixed = $value;
 				break;
@@ -235,6 +239,10 @@ class KmapViewAux extends ViewAux {
 			$data['fixed'] = true;
 		}
 
+		if(!$this->map) {
+			$data['map'] = false;
+		}
+
 		if(!$this->generator) {
 			$data['generator'] = false;
 		}
@@ -271,6 +279,10 @@ class KmapViewAux extends ViewAux {
 
 		if(count($this->dontcare) > 0) {
 			$data['dontcare'] = $this->dontcare;
+		}
+
+		if($this->labels !== null) {
+			$data['labels'] = $this->labels;
 		}
 
 		if(strlen($class) > 0) {
@@ -348,6 +360,7 @@ class KmapViewAux extends ViewAux {
 	private $generator;             // Display the generator
 	private $fixed;                 // Fixed minterm choice, no generator
 	private $genDontCare = false;	// Generate don't cares in problems
+	private $map = true;            // Include the actual map?
 
 	// A results selector. Selector that will be set to the success value
 	// if the expression successfully checks
