@@ -138,6 +138,7 @@ class KmapViewAux extends ViewAux {
 		$this->resultSel = null;
 		$this->expressionSel = null;
 		$this->success = 'success';
+		$this->options = [];
 
 		$this->minterms = [];
 		$this->dontcare = [];
@@ -148,6 +149,7 @@ class KmapViewAux extends ViewAux {
 
 	/**
 	 * Present the Karnaugh map editor window in a div.
+	 * @param string|null $class Optional class to add to the div
 	 * @return string HTML
 	 */
 	public function present($class=null) {
@@ -171,69 +173,20 @@ class KmapViewAux extends ViewAux {
 		$html .= $this->present_div($site, $user, $class);
 
 		return $html;
-
-//		$this->new_id();
-//
-//		if ($user === null) {
-//			$user = $this->view->get_user();
-//		}
-//
-//		$course = $user->get_course();
-//
-//		$class = $class !== null ? ' ' . $class : '';
-//		$html = '<div id="' . $this->id . '" class="kmap-practice' . $class . '"></div>';
-//
-//		$html .= '<script>$(document).ready(function()' . '{';
-//
-//		$root = $course->get_root() . '/cirsim';
-//
-//		$other = "kmap.config.size=$this->size;" .
-//			'kmap.config.verbose=' . ($this->verbose ? "true" : "false") . ';';
-//
-//		if ($this->fixed) {
-//			$other .= 'kmap.config.fixed=true;';
-//		}
-//
-//		if (count($this->minterms) > 0) {
-//			$minterms = implode(",", $this->minterms);
-//			$other .= "kmap.config.minterms=[$minterms];";
-//		}
-//
-//		if ($this->genDontCare) {
-//			$other .= "kmap.config.gendontcare=true;";
-//		}
-//
-//		if($this->labels !== null) {
-//			$labels = '';
-//			foreach($this->labels as $label) {
-//				if(strlen($labels) > 0) {
-//					$labels .= ",";
-//				}
-//				$labels .= '"' . $label . '"';
-//			}
-//			$other .= "kmap.config.labels=[$labels];";
-//		}
-//
-//		$other .= $this->js;
-//
-//		$html .= <<<JS
-//var kmap = new Kmap.Practice("$root", "#$this->id");$other
-//JS;
-//
-//		$html .= 'kmap.run();});</script>';
-//		return $html;
 	}
 
 	/**
 	 * Present the kmap div in a view.
-	 * @return string
+	 * @param Site $site The site object
+	 * @param User $user The current user
+	 * @param null $class Optional class to add to the practice section
+	 * @return string HTML
 	 */
 	public function present_div(Site $site, User $user, $class=null) {
 		$html = '';
 
-		$data = [
-			'size'=>$this->size
-		];
+		$data = $this->options;
+		$data['size'] = $this->size;
 
 		if($this->fixed) {
 			$data['fixed'] = true;
@@ -295,47 +248,6 @@ class KmapViewAux extends ViewAux {
 		return $html;
 	}
 
-//	public function present_script(\Course $course, \User $user, $demo=false, $json=null) {
-//		$html = '<script>$(document).ready(function()' . '{';
-//
-//		$root = $course->get_root() . '/cirsim';
-//
-//		$id = $user->get_id();
-//		$staff = $user->at_least(\User::GRADER) ? "1" : "0";
-//
-//		$minterms = implode(",", $this->minterms);
-//
-//		$html .= <<<JS
-//var kmap = new Kmap.Main("$root", "#$this->id"); kmap.config.size=$this->size;
-//kmap.config.minterms=[$minterms];
-//JS;
-//
-//		if(count($this->dontcare) > 0) {
-//			$dontcare = implode(",", $this->dontcare);
-//			$html .= "kmap.config.dontcare=[$dontcare];";
-//		}
-//
-//		if($this->genDontCare) {
-//			$html .= "kmap.config.gendontcare=true";
-//		}
-//
-//		if($this->labels !== null) {
-//			$labels = '';
-//			foreach($this->labels as $label) {
-//				if(strlen($labels) > 0) {
-//					$labels .= ",";
-//				}
-//				$labels .= '"' . $label . '"';
-//			}
-//			$html .= "kmap.config.labels=[$labels];";
-//		}
-//
-//		$html .= $this->js;
-//
-//		$html .= 'kmap.run();});</script>';
-//		return $html;
-//	}
-
 	/**
 	 * Set selectors that will be set when Check is pressed.
 	 *
@@ -352,6 +264,15 @@ class KmapViewAux extends ViewAux {
 		$this->success = $success;
 	}
 
+	/**
+	 * Add other Kmap config options.
+	 * @param string $option Option name
+	 * @param mixed $value Value to set
+	 */
+	public function option($option, $value) {
+		$this->options[$option] = $value;
+	}
+
 
 	private $size;                  // Size: 2, 3, or 4
 	private $manual;                // Manual data entry?
@@ -361,6 +282,8 @@ class KmapViewAux extends ViewAux {
 	private $fixed;                 // Fixed minterm choice, no generator
 	private $genDontCare = false;	// Generate don't cares in problems
 	private $map = true;            // Include the actual map?
+	private $options;               // Other options to set
+
 
 	// A results selector. Selector that will be set to the success value
 	// if the expression successfully checks
@@ -369,8 +292,8 @@ class KmapViewAux extends ViewAux {
 	private $success;       // Value resultSel will be set to if check is successful ('fail' otherwise)
 	private $expressionSel; // Selector that will be set to the expression each time check is pressed.
 
-	private $verbose = true;		///< Verbose response on mistakes
-	private $minterms = array();	///< The minterms for the problem
-	private $dontcare = array(); 	///< Minterms we don't care about
-	private $labels = null;			///< Optional array of labels to use
+	private $verbose = true;		// Verbose response on mistakes
+	private $minterms = [];	        // The minterms for the problem
+	private $dontcare = []; 	    // Minterms we don't care about
+	private $labels = null;			// Optional array of labels to use
 }
