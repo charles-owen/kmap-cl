@@ -18,10 +18,13 @@ use CL\Course\Member;
  *
  * @cond
  * @property boolean fixed
+ * @property boolean generator
+ * @property boolean solve
+ * @property boolean solved
+ *
  * @property int size
  * @property boolean manual
  * @property array minterms
- * @property boolean solve
  * @property boolean verbose
  * @endcond
  */
@@ -46,22 +49,19 @@ class KmapViewAux extends ViewAux {
 	/**
 	 * Property set magic method
 	 *
-	 * size -
-	 * minterms - The minterms to set on the map
-	 * dontcare = Minterms that are don't cares
-	 * fixed - A single set of minterms is chosen and the
-	 *         the generator features are disabled. (default=false)
-	 * verbose - Give verbose response on mistakes (default=true)
-	 *
 	 * <b>Properties</b>
 	 * Property | Type | Description
 	 * -------- | ---- | -----------
-	 * fixed | boolean | If set true, practice generate features are disabled (default=false)
-	 * genDontCareOption | boolean | Include don't cares in the generator options
-	 * generator | boolean | Include the generator? (default = true)
-	 * manual | boolean | Include the manual data entry section? (default=false)
-	 * size | int | Size of the map 2, 3, or 4
-	 * solve | boolean | Is the solve button provided? (default=false)
+     * dontcare | array | Array of don't cares to use
+     * dontcares | array | Same as dontcare
+     * fixed | boolean | If set true, practice generate features are disabled (default=false)
+     * genDontCareOption | boolean | Include don't cares in the generator options
+     * generator | boolean | Include the generator? (default = true)
+     * manual | boolean | Include the manual data entry section? (default=false)
+     * minterms | array | Array of minterms to use
+     * size | int | Size of the map 2, 3, or 4
+     * solve | boolean | Is the solve button provided? (default=false)
+     * solved | boolean | Present a solved map (default=false)
 	 * verbose | boolean | Verbose answers on mistakes (default=true)
 	 *
 	 * @param string $property Property name
@@ -80,6 +80,10 @@ class KmapViewAux extends ViewAux {
 			case 'solve':
 				$this->solve = $value;
 				break;
+
+            case 'solved':
+                $this->solved = $value;
+                break;
 
 			case 'genDontCareOption':
 				$this->genDontCareOption = $value;
@@ -105,7 +109,8 @@ class KmapViewAux extends ViewAux {
 				$this->verbose = $value;
 				break;
 
-			case "dontcare":
+            case "dontcare":
+            case "dontcares":
 				$this->dontcare = $value;
 				break;
 
@@ -131,6 +136,7 @@ class KmapViewAux extends ViewAux {
 		$this->size = 4;
 		$this->manual = false;
 		$this->solve = false;
+		$this->solved = false;
 		$this->genDontCareOption = true;
 		$this->generator = true;
 		$this->fixed = false;
@@ -208,6 +214,10 @@ class KmapViewAux extends ViewAux {
 			$data['solve'] = true;
 		}
 
+        if($this->solved) {
+            $data['solved'] = true;
+        }
+
 		if(!$this->verbose) {
 			$data['verbose'] = false;
 		}
@@ -277,6 +287,7 @@ class KmapViewAux extends ViewAux {
 	private $size;                  // Size: 2, 3, or 4
 	private $manual;                // Manual data entry?
 	private $solve;                 // Include Solve button?
+    private $solved;                // Present a solved map?
 	private $genDontCareOption;     // Generator has don't cares as an option?
 	private $generator;             // Display the generator
 	private $fixed;                 // Fixed minterm choice, no generator
