@@ -248,9 +248,11 @@ class KmapViewAux extends ViewAux {
 			$data['labels'] = $this->labels;
 		}
 
-		if(strlen($class) > 0) {
+		if($class !== null && strlen($class) > 0) {
 			$class = ' ' . $class;
-		}
+		} else {
+            $class = '';
+        }
 
 		$payload = base64_encode(htmlspecialchars(json_encode($data), ENT_NOQUOTES));
 		$html .= '<div class="cl-kmap' . $class . '">' . $payload . '</div>';
