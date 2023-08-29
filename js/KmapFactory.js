@@ -4,7 +4,6 @@ export const KmapFactory = function() {
 }
 
 KmapFactory.create = function(site) {
-
 	function install() {
 		const elements = document.querySelectorAll('div.cl-kmap');
 		for(let i=0; i<elements.length; i++) {

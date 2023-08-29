@@ -5,5 +5,4 @@ export {Kmap};
 export default Kmap;
 
 import {KmapFactory} from './js/KmapFactory';
-
 KmapFactory.create(Site.Site);
